@@ -187,7 +187,7 @@ const createPrepaidOrder = async (req, res) => {
 					}
 				)
 				.then(function (response) {
-					res.json({ url: response.data.data.instrumentResponse.redirectInfo.url });
+					// res.json({ url: response.data.data.instrumentResponse.redirectInfo.url });
 					res.redirect(response.data.data.instrumentResponse.redirectInfo.url);
 				})
 				.catch(function (error) {
