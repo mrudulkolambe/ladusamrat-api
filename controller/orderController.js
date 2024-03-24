@@ -159,7 +159,7 @@ const createPrepaidOrder = async (req, res) => {
 				redirectUrl: `https://ladusamrat-api.vercel.app/${orderID}`,
 				callbackUrl: `https://ladusamrat-api.vercel.app/${orderID}`,
 				"redirectMode": "REDIRECT",
-				mobileNumber: "9999999999",
+				mobileNumber: req.body.billing_phone,
 				paymentInstrument: {
 					type: "PAY_PAGE",
 				},
@@ -187,8 +187,7 @@ const createPrepaidOrder = async (req, res) => {
 					}
 				)
 				.then(function (response) {
-					// res.json({ url: response.data.data.instrumentResponse.redirectInfo.url });
-					res.redirect(response.data.data.instrumentResponse.redirectInfo.url);
+					res.json({ url: response.data.data.instrumentResponse.redirectInfo.url });
 				})
 				.catch(function (error) {
 					res.send(error);

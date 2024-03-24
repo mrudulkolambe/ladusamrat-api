@@ -56,44 +56,48 @@ const checkStatus = async (req, res) => {
             'X-VERIFY': checksum,
             'X-MERCHANT-ID': `${merchantId}`
         }
-    }).then(async (response) => {
-        if (response.data.success === true) {
-            const order = await Order.findOne({
-                orderID: merchantTransactionId,
-            });
-            if (order) {
-                let data = {
-                    "email": process.env.DASHBOARD_USER_EMAIL,
-                    "password": process.env.DASHBOARD_USER_PASSWORD
-                };
-                axios('https://apiv2.shiprocket.in/v1/external/auth/login', {
-                    method: "POST",
-                    data: data,
-                })
-                    .then((authResponse) => {
-                        axios('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc', {
-                            method: "POST",
-                            data: JSON.parse(order.data),
-                            maxBodyLength: Infinity,
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'Authorization': `Bearer ${authResponse.data.token}`
-                            },
-                        })
-                            .then((shiprocketResponse) => {
-                                return res.redirect("https://ladusamrat-store.vercel.app?clear=yes")
-                            })
-                            .catch((err) =>{
-                                return res.json(err)
-                            })
-                    })
-            }
-        } else {
-            const url = `http://localhost:3000/fail`
-            return res.send("order not found")
-            // return res.send(response.data)
-        }
     })
+        .then(async (response) => {
+            if (response.data.success === true) {
+                const order = await Order.findOne({
+                    orderID: merchantTransactionId,
+                });
+                if (order) {
+                    let data = {
+                        "email": process.env.DASHBOARD_USER_EMAIL,
+                        "password": process.env.DASHBOARD_USER_PASSWORD
+                    };
+                    axios('https://apiv2.shiprocket.in/v1/external/auth/login', {
+                        method: "POST",
+                        data: data,
+                    })
+                        .then((authResponse) => {
+                            axios('https://apiv2.shiprocket.in/v1/external/orders/create/adhoc', {
+                                method: "POST",
+                                data: JSON.parse(order.data),
+                                maxBodyLength: Infinity,
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                    'Authorization': `Bearer ${authResponse.data.token}`
+                                },
+                            })
+                                .then((shiprocketResponse) => {
+                                    return res.redirect("https://ladusamrat-store.vercel.app?clear=yes")
+                                })
+                                .catch((err) => {
+                                    return res.json(err)
+                                })
+                        })
+                        .catch((err) => {
+                            res.json(err)
+                        })
+                }
+            } else {
+                const url = `http://localhost:3000/fail`
+                return res.json({ message: "order not found" })
+                // return res.send(response.data)
+            }
+        })
         .catch((error) => {
             return res.json(error);
         });
