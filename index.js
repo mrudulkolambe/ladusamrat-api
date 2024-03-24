@@ -82,24 +82,24 @@ const checkStatus = async (req, res) => {
                                 },
                             })
                                 .then((shiprocketResponse) => {
-                                    return res.redirect("https://ladusamrat-store.vercel.app?clear=yes")
+                                    return res.status(200).json({ url: "https://ladusamrat-store.vercel.app?clear=yes" })
                                 })
                                 .catch((err) => {
-                                    return res.json(err)
+                                    return res.status(403).json(err)
                                 })
                         })
                         .catch((err) => {
-                            res.json(err)
+                            res.status(500).json(err)
                         })
                 }
             } else {
                 const url = `http://localhost:3000/fail`
-                return res.json({ message: "order not found" })
+                return res.status(400).json({ message: "order not found" })
                 // return res.send(response.data)
             }
         })
         .catch((error) => {
-            return res.json(error);
+            return res.status(500).json(error);
         });
 };
 app.get("/:id", checkStatus)
