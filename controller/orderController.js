@@ -187,7 +187,7 @@ const createPrepaidOrder = async (req, res) => {
 					}
 				)
 				.then(function (response) {
-					res.redirect(response.data.data.instrumentResponse.redirectInfo.url);
+					res.json({ url: response.data.data.instrumentResponse.redirectInfo.url });
 				})
 				.catch(function (error) {
 					res.send(error);
@@ -196,6 +196,57 @@ const createPrepaidOrder = async (req, res) => {
 	} catch (error) {
 		return res.json(error);
 	}
+}
+
+const createOrder1 = (req, res) => {
+	const amount = 100 + 30;
+	let orderID = uuidv4()
+	let userId = "MUID123";
+	let SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
+	let SALT_INDEX = 1;
+
+	PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"
+	let normalPayLoad = {
+		merchantId: "PGTESTPAYUAT",
+		merchantTransactionId: orderID,
+		merchantUserId: userId,
+		amount: amount * 100,
+		redirectUrl: `https://ladusamrat-api.vercel.app/${orderID}`,
+		callbackUrl: `https://ladusamrat-api.vercel.app/${orderID}`,
+		"redirectMode": "REDIRECT",
+		mobileNumber: "9999999999",
+		paymentInstrument: {
+			type: "PAY_PAGE",
+		},
+	};
+
+	let bufferObj = Buffer.from(JSON.stringify(normalPayLoad), "utf8");
+	let base64EncodedPayload = bufferObj.toString("base64");
+
+	let string = base64EncodedPayload + "/pg/v1/pay" + SALT_KEY;
+	let sha256_val = sha256(string);
+	let xVerifyChecksum = sha256_val + "###" + SALT_INDEX;
+
+	axios
+		.post(
+			`${PHONE_PE_HOST_URL}/pg/v1/pay`,
+			{
+				request: base64EncodedPayload,
+			},
+			{
+				headers: {
+					"Content-Type": "application/json",
+					"X-VERIFY": xVerifyChecksum,
+					accept: "application/json",
+				},
+			}
+		)
+		.then(function (response) {
+			res.json({ url: response.data.data.instrumentResponse.redirectInfo.url });
+		})
+		.catch(function (error) {
+			res.send(error);
+		});
 }
 
 const getAllOrders = (req, res) => {
@@ -218,7 +269,7 @@ const getAllOrders = (req, res) => {
 					}
 				})
 					.then((response) => {
-						return res.json({error:false, ...response.data, message: "Fetched successfully"})
+						return res.json({ error: false, ...response.data, message: "Fetched successfully" })
 					})
 			}).catch((err) => {
 				return res.json(err)
@@ -229,4 +280,35 @@ const getAllOrders = (req, res) => {
 	}
 }
 
-module.exports = { createOrder, createPrepaidOrder, getAllOrders }
+const getCustomerOrders = (req, res) => {
+	try {
+		let data = {
+			"email": process.env.DASHBOARD_USER_EMAIL,
+			"password": process.env.DASHBOARD_USER_PASSWORD
+		};
+
+		axios('https://apiv2.shiprocket.in/v1/external/auth/login', {
+			method: "POST",
+			data: data,
+		})
+			.then(async (authResponse) => {
+				axios('https://apiv2.shiprocket.in/v1/external/orders', {
+					method: "GET",
+					maxBodyLength: Infinity,
+					headers: {
+						"Authorization": `Bearer ${authResponse.data.token}`
+					}
+				})
+					.then((response) => {
+						return res.json({ error: false, ...response.data, message: "Fetched successfully" })
+					})
+			}).catch((err) => {
+				return res.json(err)
+			})
+	}
+	catch (error) {
+		return res.json(error);
+	}
+}
+
+module.exports = { createOrder, createPrepaidOrder, getAllOrders, createOrder1 }
