@@ -41,7 +41,6 @@ app.use("/order", orderRouter)
 
 const checkStatus = async (req, res) => {
     const merchantTransactionId = req.params.id
-    console.log(merchantTransactionId)
     const merchantId = "PGTESTPAYUAT"
     let salt_key = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
     const keyIndex = 1;
@@ -59,18 +58,15 @@ const checkStatus = async (req, res) => {
         }
     }).then(async (response) => {
         if (response.data.success === true) {
-            console.log(response.data);
             const url = `http://localhost:3000/`
             const order = await Order.findOne({
                 orderID: merchantTransactionId,
             });
-            console.log(order)
             if (order) {
                 let data = {
                     "email": process.env.DASHBOARD_USER_EMAIL,
                     "password": process.env.DASHBOARD_USER_PASSWORD
                 };
-                console.log(data)
                 axios('https://apiv2.shiprocket.in/v1/external/auth/login', {
                     method: "POST",
                     data: data,

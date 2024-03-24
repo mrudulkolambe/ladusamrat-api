@@ -63,7 +63,6 @@ const createOrder = async (req, res) => {
 						},
 					})
 						.then((response) => {
-							console.log(response.data)
 							return res.status(200).json({
 								error: false,
 								message: "Order placed Successfully",
@@ -137,7 +136,6 @@ const createPrepaidOrder = async (req, res) => {
 		}
 
 		let orderData = JSON.stringify(order);
-		console.log(orderData);
 		const dbOrder = new Order({
 			customer: req.customer._id,
 			orderID: orderID,
@@ -146,7 +144,6 @@ const createPrepaidOrder = async (req, res) => {
 		const savedOrder = await dbOrder.save();
 
 		if (savedOrder) {
-			console.log(savedOrder)
 			const amount = req.body.sub_total + 30;
 
 			let userId = "MUID123";
@@ -159,7 +156,7 @@ const createPrepaidOrder = async (req, res) => {
 				merchantTransactionId: orderID,
 				merchantUserId: userId,
 				amount: amount * 100,
-				redirectUrl: `http://localhost:3002/${orderID}`,
+				redirectUrl: `https://ladusamrat-api.vercel.app/${orderID}`,
 				"redirectMode": "REDIRECT",
 				mobileNumber: "9999999999",
 				paymentInstrument: {
@@ -189,7 +186,6 @@ const createPrepaidOrder = async (req, res) => {
 					}
 				)
 				.then(function (response) {
-					console.log("response->", JSON.stringify(response.data));
 					res.redirect(response.data.data.instrumentResponse.redirectInfo.url);
 				})
 				.catch(function (error) {
@@ -197,7 +193,6 @@ const createPrepaidOrder = async (req, res) => {
 				});
 		}
 	} catch (error) {
-		console.log(error)
 		return res.json(error);
 	}
 }
@@ -222,7 +217,6 @@ const getAllOrders = (req, res) => {
 					}
 				})
 					.then((response) => {
-						console.log(console.log(JSON.stringify(response.data)))
 						return res.json({error:false, ...response.data, message: "Fetched successfully"})
 					})
 			}).catch((err) => {

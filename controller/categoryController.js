@@ -48,7 +48,6 @@ const addCategory = async (req, res) => {
 }
 
 const editCategory = async (req, res) => {
-    console.log(req.body)
     try {
         const updatedCategory = await Category.findByIdAndUpdate(req.body._id, { category_name: req.body.category_name }, {
             returnOriginal: false
