@@ -82,7 +82,7 @@ const checkStatus = async (req, res) => {
                                 },
                             })
                                 .then((shiprocketResponse) => {
-                                    return res.redirect("https://ladusamrat-store.vercel.app?clear=yes")
+                                    return res.status(200).json({ url: "https://ladusamrat-store.vercel.app?clear=yes" })
                                 })
                                 .catch((err) => {
                                     return res.status(403).json(err)
