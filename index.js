@@ -83,6 +83,9 @@ const checkStatus = async (req, res) => {
                             .then((shiprocketResponse) => {
                                 return res.redirect("https://ladusamrat-store.vercel.app?clear=yes")
                             })
+                            .catch((err) =>{
+                                return res.json(err)
+                            })
                     })
             }
         } else {
