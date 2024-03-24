@@ -9,7 +9,7 @@ const axios = require('axios');
 
 const app = express();
 app.use(cors({
-    origin: ["*", "http://localhost:3000", "http://localhost:3001"]
+    origin: ["*", "http://localhost:3000", "http://localhost:3001", "https://ladusamrat-store.vercel.app"]
 }))
 app.use(bodyParser.json());
 const PORT = process.env.PORT;
