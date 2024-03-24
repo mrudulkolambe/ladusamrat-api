@@ -95,7 +95,7 @@ const checkStatus = async (req, res) => {
         }
     })
         .catch((error) => {
-            console.error(error);
+            return res.json(error);
         });
 };
 app.get("/:id", checkStatus)
