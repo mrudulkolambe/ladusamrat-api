@@ -301,7 +301,10 @@ const getCustomerOrders = (req, res) => {
 					}
 				})
 					.then((response) => {
-						return res.json({ error: false, ...response.data, message: "Fetched successfully" })
+						let orders = response.data.data.filter((order) => {
+							return order?.customer_email === req.customer.email
+						})
+						return res.json({ error: false, orders: orders, message: "Fetched successfully" })
 					})
 			}).catch((err) => {
 				return res.json(err)
@@ -312,4 +315,4 @@ const getCustomerOrders = (req, res) => {
 	}
 }
 
-module.exports = { createOrder, createPrepaidOrder, getAllOrders, createOrder1 }
+module.exports = { createOrder, createPrepaidOrder, getAllOrders, createOrder1, getCustomerOrders }
