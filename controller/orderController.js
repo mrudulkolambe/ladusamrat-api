@@ -300,9 +300,10 @@ const getCustomerOrders = (req, res) => {
 						"Authorization": `Bearer ${authResponse.data.token}`
 					}
 				})
-					.then((response) => {
+					.then(async (response) => {
+						const user = await Customer.findById(req.customer._id)
 						let orders = response.data.data.filter((order) => {
-							return order?.customer_email === req.customer.email
+							return order?.customer_email === user.email
 						})
 						return res.json({ error: false, orders: orders, message: "Fetched successfully" })
 					})
