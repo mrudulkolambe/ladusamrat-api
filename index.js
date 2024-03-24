@@ -58,7 +58,6 @@ const checkStatus = async (req, res) => {
         }
     }).then(async (response) => {
         if (response.data.success === true) {
-            const url = `http://localhost:3000/`
             const order = await Order.findOne({
                 orderID: merchantTransactionId,
             });
@@ -82,7 +81,7 @@ const checkStatus = async (req, res) => {
                             },
                         })
                             .then((shiprocketResponse) => {
-                                return res.redirect("http://localhost:3000")
+                                return res.redirect("https://ladusamrat-store.vercel.app?clear=yes")
                             })
                     })
             }

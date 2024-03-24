@@ -157,6 +157,7 @@ const createPrepaidOrder = async (req, res) => {
 				merchantUserId: userId,
 				amount: amount * 100,
 				redirectUrl: `https://ladusamrat-api.vercel.app/${orderID}`,
+				callbackUrl: `https://ladusamrat-api.vercel.app/${orderID}`,
 				"redirectMode": "REDIRECT",
 				mobileNumber: "9999999999",
 				paymentInstrument: {
