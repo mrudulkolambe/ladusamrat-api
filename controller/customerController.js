@@ -72,14 +72,14 @@ const updateProfile = async (req, res) => {
 
 const getAllCustomers = async (req, res) => {
     try {
-        const customer = await Customer.find();
+        const customer = await Customer.find({}, { password: 0, });
         if (!customer) {
             res.status(500).json({
-                error: true, message: "Something Went Wrong", customer: customer,
+                error: true, message: "Something Went Wrong", customers: customer,
             });
         } else {
             res.json({
-                error: false, message: "All customers are Fetched Successful!", customer: customer,
+                error: false, message: "All customers are Fetched Successful!", customers: customer,
             });
         }
     } catch (error) {
