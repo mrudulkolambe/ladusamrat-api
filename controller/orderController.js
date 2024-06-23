@@ -147,12 +147,12 @@ const createPrepaidOrder = async (req, res) => {
 			const amount = req.body.sub_total + 30;
 
 			let userId = "MUID123";
-			let SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
+			let SALT_KEY = "e21de4dd-62b4-4897-948a-d5750bfbf5cb"
 			let SALT_INDEX = 1;
 
-			PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"
+			PHONE_PE_HOST_URL = "https://api.phonepe.com/apis/hermes"
 			let normalPayLoad = {
-				merchantId: "PGTESTPAYUAT",
+				merchantId: "LADOOSAMRATONLINE",
 				merchantTransactionId: orderID,
 				merchantUserId: userId,
 				amount: amount * 100,
@@ -202,12 +202,12 @@ const createOrder1 = (req, res) => {
 	const amount = 100 + 30;
 	let orderID = uuidv4()
 	let userId = "MUID123";
-	let SALT_KEY = "099eb0cd-02cf-4e2a-8aca-3e6c6aff0399"
+	let SALT_KEY = "e21de4dd-62b4-4897-948a-d5750bfbf5cb"
 	let SALT_INDEX = 1;
 
-	PHONE_PE_HOST_URL = "https://api-preprod.phonepe.com/apis/pg-sandbox"
+	PHONE_PE_HOST_URL = "https://api.phonepe.com/apis/hermes"
 	let normalPayLoad = {
-		merchantId: "PGTESTPAYUAT",
+		merchantId: "LADOOSAMRATONLINE",
 		merchantTransactionId: orderID,
 		merchantUserId: userId,
 		amount: amount * 100,
