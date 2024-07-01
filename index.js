@@ -34,6 +34,10 @@ app.use("/product", productRouter)
 const categoryRouter = require("./routes/categoryRoutes");
 app.use("/category", categoryRouter)
 
+//Banner Router
+const bannerRouter = require("./routes/bannerRoutes");
+app.use("/banner", bannerRouter)
+
 // Order Router
 const orderRouter = require("./routes/orderRoutes");
 const Order = require('./model/Order');
